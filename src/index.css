@@ -1,0 +1,816 @@
+/* =========================================================================
+   DESIGN TOKENS — biến CSS dùng chung, tự đổi theo light/dark.
+   Không thư viện UI, không web-font (font hệ thống = 0 byte tải) → nhẹ & nhanh.
+   ========================================================================= */
+:root {
+  color-scheme: light dark;
+
+  --c-primary: #0d9488;
+  --c-primary-strong: #0f766e;
+  --c-primary-soft: #d3faf2;
+  --c-primary-contrast: #ffffff;
+
+  /* Gradient thương hiệu (teal → cyan) dùng cho nút chính, banner, FAB */
+  --grad-1: #0d9488;
+  --grad-2: #0891b2;
+  --grad-shadow: rgba(13, 148, 136, 0.32);
+
+  --c-success: #16a34a;
+  --c-success-soft: #dcfce7;
+  --c-danger: #e11d48;
+  --c-danger-soft: #ffe4e6;
+  --c-warning: #b45309;
+  --c-warning-soft: #fef3c7;
+
+  --c-bg: #eef2f7;
+  --c-bg-top: #e3f7f1; /* ánh teal nhạt ở đỉnh khung */
+  --c-surface: #ffffff;
+  --c-surface-2: #f4f7fb;
+  --c-text: #0f172a;
+  --c-text-muted: #64748b;
+  --c-border: #e6ebf2;
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.06);
+  --shadow: 0 6px 18px rgba(15, 23, 42, 0.09);
+  --shadow-lg: 0 18px 40px rgba(15, 23, 42, 0.16);
+
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+
+  --maxw: 520px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-primary: #2dd4bf;
+    --c-primary-strong: #5eead4;
+    --c-primary-soft: #0f3b39;
+    --c-primary-contrast: #042f2e;
+
+    --grad-1: #0d9488;
+    --grad-2: #0e7490;
+    --grad-shadow: rgba(0, 0, 0, 0.45);
+
+    --c-success: #4ade80;
+    --c-success-soft: #11331f;
+    --c-danger: #fb7185;
+    --c-danger-soft: #3a1620;
+    --c-warning: #fbbf24;
+    --c-warning-soft: #3a2c0a;
+
+    --c-bg: #0a111d;
+    --c-bg-top: #0c1c25;
+    --c-surface: #121c2e;
+    --c-surface-2: #0e1827;
+    --c-text: #e6edf6;
+    --c-text-muted: #93a4bd;
+    --c-border: #233149;
+  }
+}
+
+/* ============================== Reset nhẹ ============================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font);
+  background: var(--c-bg);
+  color: var(--c-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+}
+#root {
+  min-height: 100dvh;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  font-size: 16px; /* >=16px để iOS không tự phóng to khi focus */
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+a {
+  color: var(--c-primary-strong);
+}
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+::selection {
+  background: var(--c-primary-soft);
+  color: var(--c-text);
+}
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* ============================== Layout khung ============================== */
+.app {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--c-bg-top), var(--c-bg) 300px);
+}
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  padding-top: max(var(--sp-3), env(safe-area-inset-top));
+  background: var(--c-bg-top);
+  background: color-mix(in srgb, var(--c-bg-top) 80%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--c-border);
+}
+.appbar__title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.appbar__title > span {
+  font-weight: 500;
+  font-size: 0.76rem;
+  color: var(--c-text-muted);
+}
+.title-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0;
+}
+.title-input:focus {
+  outline: none;
+}
+.iconbtn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  color: var(--c-text-muted);
+  transition: background 0.15s, color 0.15s;
+}
+.iconbtn:hover {
+  background: var(--c-surface);
+  color: var(--c-text);
+}
+.content {
+  flex: 1;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-10);
+}
+
+/* Animation vào mượt cho từng khối (tôn trọng prefers-reduced-motion) */
+@media (prefers-reduced-motion: no-preference) {
+  .content > * {
+    animation: cardIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .content > *:nth-child(2) {
+    animation-delay: 0.06s;
+  }
+  .content > *:nth-child(3) {
+    animation-delay: 0.12s;
+  }
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================== Card ============================== */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.card--pad {
+  padding: var(--sp-5);
+}
+
+/* ============================== Avatar ============================== */
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ============================== Nút ============================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  transition: transform 0.05s ease, filter 0.15s ease, background 0.15s ease, border-color 0.15s;
+  user-select: none;
+  white-space: nowrap;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--primary {
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+  color: #fff;
+  box-shadow: 0 4px 14px var(--grad-shadow);
+}
+.btn--primary:hover {
+  filter: brightness(1.06);
+}
+.btn--ghost {
+  background: var(--c-surface);
+  border-color: var(--c-border);
+  color: var(--c-text);
+}
+.btn--ghost:hover {
+  background: var(--c-surface-2);
+}
+.btn--danger {
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+}
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+.btn--sm {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+.btn--lg {
+  padding: 15px 20px;
+  font-size: 1.02rem;
+}
+
+/* ============================== Field / input ============================== */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--c-text-muted);
+}
+.input,
+.select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  color: var(--c-text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input::placeholder {
+  color: var(--c-text-muted);
+  opacity: 0.7;
+}
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-primary-soft);
+}
+.money {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.money > .input {
+  padding-right: 28px;
+  font-weight: 600;
+}
+.money__suffix {
+  position: absolute;
+  right: 14px;
+  color: var(--c-text-muted);
+  pointer-events: none;
+}
+
+/* ============================== Chips (thành viên) ============================== */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px 5px 5px;
+  border-radius: var(--radius-full);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.chip__x {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--c-text-muted);
+  font-size: 0.7rem;
+  transition: background 0.15s, color 0.15s;
+}
+.chip__x:hover {
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+}
+
+/* ============================== Segmented control ============================== */
+.seg {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  padding: 4px;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+}
+.seg__opt {
+  padding: 9px 8px;
+  border-radius: 9px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--c-text-muted);
+  text-align: center;
+  transition: background 0.15s, color 0.15s;
+}
+.seg__opt[data-active='true'] {
+  background: var(--c-surface);
+  color: var(--c-primary-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================== Pick row (chọn người chia đều) ============================== */
+.pick {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 10px 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.pick[data-on='true'] {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+.pick__box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--c-border);
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.pick[data-on='true'] .pick__box {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+/* ============================== Stepper (số suất) ============================== */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.stepper button {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.stepper button:hover {
+  background: var(--c-surface-2);
+}
+.stepper__val {
+  min-width: 26px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ============================== Danh sách khoản chi ============================== */
+.expense {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--c-surface);
+  transition: border-color 0.15s;
+}
+.expense:hover {
+  border-color: var(--c-primary);
+}
+.expense__main {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+}
+.expense__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--c-surface-2);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.expense__desc {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.expense__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--c-text-muted);
+  margin-top: 3px;
+}
+.expense__amt {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.expense__del {
+  padding: 0 14px;
+  color: var(--c-text-muted);
+  font-size: 0.95rem;
+  transition: background 0.15s, color 0.15s;
+}
+.expense__del:hover {
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+}
+
+/* ============================== Kết quả ============================== */
+.result-hero {
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: var(--sp-4);
+  box-shadow: 0 10px 26px var(--grad-shadow);
+}
+.result-hero__total {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.result-hero__sub {
+  opacity: 0.92;
+  font-size: 0.86rem;
+  margin-top: 2px;
+}
+.transfer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border);
+}
+.transfer + .transfer {
+  margin-top: var(--sp-2);
+}
+.transfer__pair {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.transfer__name {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 30%;
+}
+.transfer__arrow {
+  color: var(--c-primary-strong);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.transfer__amt {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--c-primary-strong);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.person {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--c-border);
+}
+.person:last-child {
+  border-bottom: none;
+}
+.person__name {
+  font-weight: 600;
+}
+.person__meta {
+  font-size: 0.8rem;
+  color: var(--c-text-muted);
+  margin-top: 1px;
+}
+.tag {
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+.tag--pos {
+  background: var(--c-success-soft);
+  color: var(--c-success);
+}
+.tag--neg {
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+}
+.tag--zero {
+  background: var(--c-surface-2);
+  color: var(--c-text-muted);
+}
+.warn {
+  background: var(--c-warning-soft);
+  color: var(--c-warning);
+  border-radius: var(--radius);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: 0.86rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ============================== Menu nhỏ (⋯) ============================== */
+.menu {
+  position: absolute;
+  top: calc(100% - 4px);
+  right: var(--sp-3);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 20;
+  min-width: 200px;
+  animation: fade 0.12s ease;
+}
+.menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+}
+.menu button:hover {
+  background: var(--c-surface-2);
+}
+.menu__danger {
+  color: var(--c-danger);
+}
+.menu-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  background: transparent;
+  cursor: default;
+}
+
+/* ============================== Dock thêm khoản chi ============================== */
+.dock {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--maxw);
+  background: var(--c-surface);
+  background: color-mix(in srgb, var(--c-surface) 90%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--c-border);
+  box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.06);
+  padding: 12px var(--sp-4);
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 30;
+}
+
+/* ============================== Tiện ích ============================== */
+.section-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-text-muted);
+  font-weight: 700;
+  margin-bottom: var(--sp-3);
+}
+.split-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--c-border);
+}
+.split-row:last-child {
+  border-bottom: none;
+}
+.empty {
+  text-align: center;
+  padding: var(--sp-6) var(--sp-4);
+  color: var(--c-text-muted);
+}
+.empty__icon {
+  font-size: 32px;
+  margin-bottom: var(--sp-2);
+  opacity: 0.85;
+}
+.badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: var(--c-warning-soft);
+  color: var(--c-warning);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.muted {
+  color: var(--c-text-muted);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.between {
+  justify-content: space-between;
+}
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%);
+  background: var(--c-text);
+  color: var(--c-bg);
+  padding: 11px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  animation: fade 0.15s ease;
+}
+
+/* ============================== QR chuyển khoản ============================== */
+.qr-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.qr {
+  background: #fff;
+  padding: 14px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 256px;
+  margin: var(--sp-2) auto;
+  box-shadow: var(--shadow-sm);
+}
+.qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.qr svg path,
+.qr svg rect {
+  fill: #000;
+}
+
+/* Mỗi dòng "ai chuyển ai" là một nút bấm để mở mã QR */
+.transfer {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.transfer:hover {
+  border-color: var(--c-primary);
+}
+.transfer__qr {
+  color: var(--c-primary-strong);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}

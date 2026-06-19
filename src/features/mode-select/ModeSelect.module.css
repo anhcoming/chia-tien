@@ -1,0 +1,100 @@
+.hero {
+  text-align: center;
+  padding: var(--sp-10) var(--sp-2) var(--sp-6);
+}
+
+.logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  margin: 0 auto var(--sp-4);
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+  color: #fff;
+  font-size: 38px;
+  font-weight: 800;
+  box-shadow: 0 12px 30px var(--grad-shadow);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  color: var(--c-text-muted);
+  margin-top: 8px;
+  font-size: 1rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-5);
+  transition: transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.option:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--c-primary);
+}
+
+.icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.iconQuick {
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+}
+.iconRoom {
+  background: var(--c-surface-2);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+.optitle {
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.desc {
+  color: var(--c-text-muted);
+  font-size: 0.9rem;
+  margin-top: 3px;
+  line-height: 1.45;
+}
+.chev {
+  color: var(--c-text-muted);
+  font-size: 1.5rem;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-6);
+}
+.pill {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--c-text-muted);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+}

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Chia Tiền — Xem trước giao diện</title>
+<style>
+/* =========================================================================
+   DESIGN TOKENS — biến CSS dùng chung, tự đổi theo light/dark.
+   Không thư viện UI, không web-font (font hệ thống = 0 byte tải) → nhẹ & nhanh.
+   ========================================================================= */
+:root {
+  color-scheme: light dark;
+
+  --c-primary: #0d9488;
+  --c-primary-strong: #0f766e;
+  --c-primary-soft: #d3faf2;
+  --c-primary-contrast: #ffffff;
+
+  /* Gradient thương hiệu (teal → cyan) dùng cho nút chính, banner, FAB */
+  --grad-1: #0d9488;
+  --grad-2: #0891b2;
+  --grad-shadow: rgba(13, 148, 136, 0.32);
+
+  --c-success: #16a34a;
+  --c-success-soft: #dcfce7;
+  --c-danger: #e11d48;
+  --c-danger-soft: #ffe4e6;
+  --c-warning: #b45309;
+  --c-warning-soft: #fef3c7;
+
+  --c-bg: #eef2f7;
+  --c-bg-top: #e3f7f1; /* ánh teal nhạt ở đỉnh khung */
+  --c-surface: #ffffff;
+  --c-surface-2: #f4f7fb;
+  --c-text: #0f172a;
+  --c-text-muted: #64748b;
+  --c-border: #e6ebf2;
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.06);
+  --shadow: 0 6px 18px rgba(15, 23, 42, 0.09);
+  --shadow-lg: 0 18px 40px rgba(15, 23, 42, 0.16);
+
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+
+  --maxw: 520px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-primary: #2dd4bf;
+    --c-primary-strong: #5eead4;
+    --c-primary-soft: #0f3b39;
+    --c-primary-contrast: #042f2e;
+
+    --grad-1: #0d9488;
+    --grad-2: #0e7490;
+    --grad-shadow: rgba(0, 0, 0, 0.45);
+
+    --c-success: #4ade80;
+    --c-success-soft: #11331f;
+    --c-danger: #fb7185;
+    --c-danger-soft: #3a1620;
+    --c-warning: #fbbf24;
+    --c-warning-soft: #3a2c0a;
+
+    --c-bg: #0a111d;
+    --c-bg-top: #0c1c25;
+    --c-surface: #121c2e;
+    --c-surface-2: #0e1827;
+    --c-text: #e6edf6;
+    --c-text-muted: #93a4bd;
+    --c-border: #233149;
+  }
+}
+
+/* ============================== Reset nhẹ ============================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font);
+  background: var(--c-bg);
+  color: var(--c-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+}
+#root {
+  min-height: 100dvh;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  font-size: 16px; /* >=16px để iOS không tự phóng to khi focus */
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+a {
+  color: var(--c-primary-strong);
+}
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+::selection {
+  background: var(--c-primary-soft);
+  color: var(--c-text);
+}
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-sett
+
+.preview-wrap{padding:24px;display:flex;justify-content:center;}
+.device{width:400px;max-width:100%;border:1px solid var(--c-border);border-radius:28px;overflow:hidden;box-shadow:var(--shadow-lg);}
+.device .app{min-height:auto;}
+.device .appbar{position:static;}
+.device .dock{position:static;transform:none;width:auto;left:auto;}
+
+</style></head>
+<body>
+<div class="preview-wrap"><div class="device"><div class="app">
+  <header class="appbar">
+    <button class="iconbtn" aria-label="Quay lại">‹</button>
+    <div class="appbar__title"><div class="title-input">Đi ăn cuối tuần</div><span>4 người · 3 khoản</span></div>
+    <button class="iconbtn" aria-label="Làm mới"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></button>
+  </header>
+  <div class="content">
+    <section class="card card--pad">
+      <div class="section-title">Thành viên (4)</div>
+      <div class="chips" style="margin-bottom:var(--sp-3)">
+        <span class="chip"><span class="avatar" data-seed="An" style="width:26px;height:26px;font-size:11px"></span>An<button class="chip__x">✕</button></span>
+        <span class="chip"><span class="avatar" data-seed="Bình" style="width:26px;height:26px;font-size:11px"></span>Bình<button class="chip__x">✕</button></span>
+        <span class="chip"><span class="avatar" data-seed="Châu" style="width:26px;height:26px;font-size:11px"></span>Châu<button class="chip__x">✕</button></span>
+        <span class="chip"><span class="avatar" data-seed="Dũng" style="width:26px;height:26px;font-size:11px"></span>Dũng<button class="chip__x">✕</button></span>
+      </div>
+      <form class="row" onsubmit="return false">
+        <input class="input grow" placeholder="Tên thành viên…">
+        <button class="btn btn--primary" type="button">Thêm</button>
+      </form>
+    </section>
+    <section class="card card--pad">
+      <div class="section-title">Khoản chi (3)</div>
+      <div class="stack">
+        <div class="expense"><button class="expense__main"><span class="expense__icon">🍜</span><div class="grow"><div class="expense__desc">Lẩu</div><div class="expense__meta"><span class="avatar" data-seed="An" style="width:18px;height:18px;font-size:8px"></span>An trả · Chia đều · 4 người</div></div><div class="expense__amt num">600.000đ</div></button><button class="expense__del">🗑</button></div>
+        <div class="expense"><button class="expense__main"><span class="expense__icon">🍺</span><div class="grow"><div class="expense__desc">Bia (Châu không uống)</div><div class="expense__meta"><span class="avatar" data-seed="Bình" style="width:18px;height:18px;font-size:8px"></span>Bình trả · Chia đều · 3 người</div></div><div class="expense__amt num">200.000đ</div></button><button class="expense__del">🗑</button></div>
+        <div class="expense"><button class="expense__main"><span class="expense__icon">🚕</span><div class="grow"><div class="expense__desc">Taxi</div><div class="expense__meta"><span class="avatar" data-seed="Châu" style="width:18px;height:18px;font-size:8px"></span>Châu trả · Theo suất · 4 người</div></div><div class="expense__amt num">120.000đ</div></button><button class="expense__del">🗑</button></div>
+      </div>
+    </section>
+    <section class="card card--pad">
+      <div class="result-hero"><div class="result-hero__total num">920.000đ</div><div class="result-hero__sub">Tổng chi · 4 người · TB 230.000đ/người</div></div>
+      <div class="section-title">Ai chuyển ai</div>
+      <div>
+        <div class="transfer"><div class="transfer__pair"><span class="avatar" data-seed="Dũng" style="width:28px;height:28px;font-size:12px"></span><span class="transfer__name">Dũng</span><span class="transfer__arrow">→</span><span class="avatar" data-seed="An" style="width:28px;height:28px;font-size:12px"></span><span class="transfer__name">An</span></div><div class="transfer__amt num">246.666đ</div></div>
+        <div class="transfer"><div class="transfer__pair"><span class="avatar" data-seed="Châu" style="width:28px;height:28px;font-size:12px"></span><span class="transfer__name">Châu</span><span class="transfer__arrow">→</span><span class="avatar" data-seed="An" style="width:28px;height:28px;font-size:12px"></span><span class="transfer__name">An</span></div><div class="transfer__amt num">60.000đ</div></div>
+        <div class="transfer"><div class="transfer__pair"><span class="avatar" data-seed="Bình" style="width:28px;height:28px;font-size:12px"></span><span class="transfer__name">Bình</span><span class="transfer__arrow">→</span><span class="avatar" data-seed="An" style="width:28px;height:28px;font-size:12px"></span><span class="transfer__name">An</span></div><div class="transfer__amt num">46.667đ</div></div>
+      </div>
+      <details open style="margin-top:var(--sp-4)">
+        <summary class="section-title" style="cursor:pointer;margin-bottom:0">Chi tiết từng người</summary>
+        <div style="margin-top:var(--sp-2)">
+          <div class="person"><span class="avatar" data-seed="An" style="width:36px;height:36px;font-size:15px"></span><div class="grow"><div class="person__name">An</div><div class="person__meta num">trả 600.000đ · phần 246.667đ</div></div><span class="tag tag--pos">+353.333đ</span></div>
+          <div class="person"><span class="avatar" data-seed="Bình" style="width:36px;height:36px;font-size:15px"></span><div class="grow"><div class="person__name">Bình</div><div class="person__meta num">trả 200.000đ · phần 246.667đ</div></div><span class="tag tag--neg">-46.667đ</span></div>
+          <div class="person"><span class="avatar" data-seed="Châu" style="width:36px;height:36px;font-size:15px"></span><div class="grow"><div class="person__name">Châu</div><div class="person__meta num">trả 120.000đ · phần 180.000đ</div></div><span class="tag tag--neg">-60.000đ</span></div>
+          <div class="person"><span class="avatar" data-seed="Dũng" style="width:36px;height:36px;font-size:15px"></span><div class="grow"><div class="person__name">Dũng</div><div class="person__meta num">trả 0đ · phần 246.666đ</div></div><span class="tag tag--neg">-246.666đ</span></div>
+        </div>
+      </details>
+      <button class="btn btn--primary btn--block btn--lg" style="margin-top:var(--sp-4)">📋 Copy kết quả để gửi nhóm</button>
+    </section>
+  </div>
+  <div class="dock"><button class="btn btn--primary btn--block btn--lg">+ Thêm khoản chi</button></div>
+</div></div></div>
+<div style="text-align:center;color:var(--c-text-muted);font-size:.8rem;margin-top:8px">Popup xác nhận khi bấm nút Làm mới</div>
+<div class="preview-wrap"><div style="width:440px;max-width:100%;border-radius:22px;padding:28px;background:rgba(2,6,23,.5)">
+  <div style="background:var(--c-surface);border:1px solid var(--c-border);border-radius:18px;box-shadow:var(--shadow-lg);overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--c-border)">
+      <div style="font-weight:700;font-size:1.05rem">Làm mới</div>
+      <span class="iconbtn" style="font-size:1.1rem">✕</span>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:16px">
+      <p class="muted">Xoá toàn bộ thành viên và khoản chi để bắt đầu nhóm mới? Thao tác này không thể hoàn tác.</p>
+      <div class="row">
+        <button class="btn btn--ghost grow">Huỷ</button>
+        <button class="btn grow" style="background:var(--c-danger);color:#fff">Xoá hết</button>
+      </div>
+    </div>
+  </div>
+</div></div>
+<script>function nameColor(s){var h=0;for(var i=0;i<s.length;i++)h=(Math.imul(h,31)+s.charCodeAt(i))>>>0;var u=h%360;return{bg:"hsl("+u+" 72% 86%)",fg:"hsl("+u+" 60% 30%)"};}function ini(n){var p=n.trim().split(/\s+/).filter(Boolean);return p.length?p[p.length-1][0].toUpperCase():"?";}document.querySelectorAll(".avatar[data-seed]").forEach(function(e){var s=e.getAttribute("data-seed"),c=nameColor(s);e.style.background=c.bg;e.style.color=c.fg;if(!e.textContent.trim())e.textContent=ini(s);});</script>
+</body></html>
